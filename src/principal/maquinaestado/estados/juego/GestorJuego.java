@@ -5,7 +5,7 @@
  */
 package principal.maquinaestado.estados.juego;
 
-import entes.Jugador;
+import principal.entes.Jugador;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
