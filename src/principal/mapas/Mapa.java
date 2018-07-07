@@ -19,7 +19,7 @@ import principal.sprites.Sprite;
  */
 public class Mapa {
 
-    private final String[] partes;
+    private String[] partes;
 
     private final int ancho;
     private final int alto;
@@ -55,7 +55,6 @@ public class Mapa {
         String spritesEnteros = partes[5];
 
         String[] cadenasSprites = spritesEnteros.split(" ");
-        
 
         sprites = extraerSprites(cadenasSprites);
 
@@ -70,16 +69,11 @@ public class Mapa {
         for (int i = 0; i < partesPaleta.length; i++) {
             String spriteTemporal = partesPaleta[i];
 
-            String[] partesSprite = spriteTemporal.split("-");
-            
-          
+            String[] partesSprite = spriteTemporal.split("\\-");
 
             int indicePaleta = Integer.parseInt(partesSprite[0]);
-            
-           
-            int indiceSpriteHoja = Integer.parseInt(partesSprite[2]);
-            System.out.println(paleta.length);
-            
+            int indiceSpriteHoja = Integer.parseInt(partesSprite[1]);
+
             paleta[indicePaleta] = hoja.getSprites(indiceSpriteHoja);
         }
         return paleta;
