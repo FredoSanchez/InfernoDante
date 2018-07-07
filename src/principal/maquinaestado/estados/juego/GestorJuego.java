@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import principal.herramientas.CargadorRecursos;
+import principal.mapas.Mapa;
 import principal.maquinaestado.EstadoJuego;
 import principal.sprites.HojaSprites;
 
@@ -20,7 +21,11 @@ public class GestorJuego implements EstadoJuego {
 
     private GestorMapa gestorMapa;
 
-    String texto = CargadorRecursos.leerArchivoTexto("/texto/prueba");
+    String texto = CargadorRecursos.leerArchivoTexto("/texto/prueba.ad");
+    
+    Mapa mapa = new Mapa("/texto/prueba.ad");
+    
+    
 
     @Override
     public void actualizar() {
@@ -28,9 +33,7 @@ public class GestorJuego implements EstadoJuego {
 
     @Override
     public void dibujar(Graphics g) {
-        g.setColor(Color.white);
-        g.drawString(texto, 10, 10);
-
+     mapa.dibujar(g);
     }
 
 }

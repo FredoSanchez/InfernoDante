@@ -50,7 +50,7 @@ public class HojaSprites {
     }
     
     public HojaSprites(final String ruta, final int anchoSprites,final int altoSprites, final boolean hojaOpaca) {
-        BufferedImage imagen;
+        final BufferedImage imagen;
         
         if(hojaOpaca){
             imagen = CargadorRecursos.cargarImagenCompatibleOpaca(ruta);
