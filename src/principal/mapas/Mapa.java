@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import principal.Constantes;
 import principal.herramientas.CargadorRecursos;
 import principal.sprites.HojaSprites;
 import principal.sprites.Sprite;
@@ -123,16 +124,16 @@ public class Mapa {
         return vectorSprites;
     }
 
-    public void dibujar(Graphics g) {
-        int anchoSprite = this.paleta[0].getAncho();
-        int altoSprite = this.paleta[0].getAlto();
+    public void dibujar(Graphics g, int posicionX, int posicionY) {
+        int anchoSprite = Constantes.LADO_SPRITE;
+        int altoSprite = anchoSprite;
         
         for (int y = 0; y < this.alto; y++) {
 
             for (int x = 0; x < this.ancho; x++) {
                 BufferedImage imagen= paleta[sprites[x+y*this.ancho]].getImagen();
                 
-                g.drawImage(imagen, x*anchoSprite, y*altoSprite,null);
+                g.drawImage(imagen,x*anchoSprite - posicionX , y*altoSprite - posicionY,null);
 
             }
         }

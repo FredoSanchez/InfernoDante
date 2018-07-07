@@ -3,13 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package principal.maquinaestado.estados.juego;
+package principal.control;
 
 /**
  *
- * @author fredy
+ * @author ferna
  */
-public class GestorMapa {
-    
-    
+public class GestorControles {
+    public static final Teclado teclado = new Teclado();
+    public  static final Raton raton = new Raton();
+
+
+
+
+
 }
+
