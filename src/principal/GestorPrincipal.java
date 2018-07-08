@@ -25,6 +25,9 @@ public class GestorPrincipal {
     private Ventana ventana;
     private GestorEstados ge;
 
+    private static int fps = 0;
+    private static int aps = 0;
+
     public GestorPrincipal(final String titulo, final int ancho, final int alto) {
         this.titulo = titulo;
         this.ancho = ancho;
@@ -32,10 +35,10 @@ public class GestorPrincipal {
     }
 
     public static void main(String[] args) {
-        GestorPrincipal gp = new GestorPrincipal("Inferno Dante", 640, 360);
+        GestorPrincipal gp = new GestorPrincipal("Inferno Dante",Constantes.ANCHO_PANTALLA_COMPLETA, Constantes.ALTO_PANTALLA_COMPLETA);
 
-        Constantes.ANCHO_VENTANA = 640;
-        Constantes.ALTO_VENTANA = 360;
+        Constantes.ANCHO_JUEGO = 640;
+        Constantes.ALTO_JUEGO = 360;
 
         gp.iniciarJuego();
         gp.iniciarBuclePrincipal();
@@ -53,8 +56,8 @@ public class GestorPrincipal {
     }
 
     private void iniciarBuclePrincipal() {
-        int aps = 0;
-        int fps = 0;
+        int actualizacionesAcumuladas = 0;
+        int framesAcumulados = 0;
 
         final int NS_POR_SEGUNDO = 1000000000;
         final int APS_OBJETIVO = 60; // APS= FPS que se quieren conseguir
@@ -74,19 +77,20 @@ public class GestorPrincipal {
 
             while (delta >= 1) {
                 actualizar();
-                aps++;
-                Constantes.APS = aps;
+                actualizacionesAcumuladas++;
                 delta--;
             }
 
             dibujar();
-            fps++;
+            framesAcumulados++;
 
             if (System.nanoTime() - referenciaContador > NS_POR_SEGUNDO) {
-                System.out.println("FPS: " + fps + " APS: " + aps);
-                aps = 0;
-                Constantes.APS = aps;
-                fps = 0;
+
+                aps = actualizacionesAcumuladas;
+                fps = framesAcumulados;
+
+                actualizacionesAcumuladas = 0;
+                framesAcumulados = 0;
                 referenciaContador = System.nanoTime();
             }
         }
@@ -100,6 +104,14 @@ public class GestorPrincipal {
     private void dibujar() {
         sd.dibujar(ge);
 
+    }
+
+    public static int getFps() {
+        return fps;
+    }
+
+    public static int getAps() {
+        return aps;
     }
 
 }
