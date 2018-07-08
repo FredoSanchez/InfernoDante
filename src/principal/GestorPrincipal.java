@@ -76,6 +76,7 @@ public class GestorPrincipal {
             while (delta >= 1) {
                 actualizar();
                 aps++;
+                Constantes.APS = aps;
                 delta--;
             }
 
@@ -85,6 +86,7 @@ public class GestorPrincipal {
             if (System.nanoTime() - referenciaContador > NS_POR_SEGUNDO) {
                 System.out.println("FPS: "+fps+" APS: "+aps);
                 aps = 0;
+                Constantes.APS = aps;
                 fps = 0;
                 referenciaContador = System.nanoTime();
             }

@@ -28,22 +28,7 @@ public class GestorJuego implements EstadoJuego {
 
     @Override
     public void actualizar() {
-        if(GestorControles.teclado.isArriba()){
-            jugador.establecerPosicionY(jugador.obtenerPosicionY() - 0.5);
-            System.out.println("Arriba");
-        }
-        
-        if(GestorControles.teclado.isAbajo()){
-            jugador.establecerPosicionY(jugador.obtenerPosicionY() + 0.5);
-        }
-        
-        if(GestorControles.teclado.isIzquierda()){
-            jugador.establecerPosicionX(jugador.obtenerPosicionX() - 0.5);
-        }
-        
-        if(GestorControles.teclado.isDerecha()){
-            jugador.establecerPosicionX(jugador.obtenerPosicionX() + 0.5);
-        }
+        jugador.actualizar();
     }
 
     @Override
