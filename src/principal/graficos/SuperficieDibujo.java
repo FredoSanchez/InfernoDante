@@ -35,7 +35,7 @@ public class SuperficieDibujo extends Canvas {
         this.ancho = ancho;
         this.alto = alto;
 
-        this.raton = new Raton();
+        this.raton = new Raton(this);
 
         setCursor(raton.obtenerCursor());
         setIgnoreRepaint(true);
@@ -44,6 +44,9 @@ public class SuperficieDibujo extends Canvas {
         setFocusable(true);
         requestFocus();
 
+    }
+    public void actualizar(){
+        raton.actualizar(this);
     }
 
     public void dibujar(GestorEstados ge) {
@@ -72,7 +75,8 @@ public class SuperficieDibujo extends Canvas {
         g.drawString("APS: " + GestorPrincipal.getAps() , 20, 50);
         g.drawString("Escala x: " + Constantes.FACTOR_ESCALADO_X,20,70);
         g.drawString("Escala y: " + Constantes.FACTOR_ESCALADO_Y,20,80);
-
+        raton.dibujar(g);
+        
         Toolkit.getDefaultToolkit().sync();
 
         g.dispose();

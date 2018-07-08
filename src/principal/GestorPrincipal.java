@@ -96,6 +96,7 @@ public class GestorPrincipal {
     private void actualizar() {
 
         ge.actualizar();
+        sd.actualizar();
     }
 
     private void dibujar() {
