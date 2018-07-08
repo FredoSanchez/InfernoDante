@@ -169,7 +169,7 @@ public class Mapa {
 
                 g.drawImage(imagen, puntoX, puntoY, null);
                 
-                g.setColor(Color.green);
+                //g.setColor(Color.green);
                 
                 /* Esto es para ver los cuadros de colision
                 for(int r = 0; r < areasColision.size(); r++ ){
