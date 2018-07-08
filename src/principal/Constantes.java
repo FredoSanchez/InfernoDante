@@ -25,7 +25,7 @@ public class Constantes {
     public static int CENTRO_VENTANA_X = ANCHO_JUEGO / 2;
     public static int CENTRO_VENTANA_Y = ALTO_JUEGO / 2;
 
-    public static String RUTA_MAPA = "/texto/prueba.ad";
+    public static String RUTA_MAPA = "/texto/prueba1.ad";
     public static String RUTA_ICONO_RATON = "";
     public static String RUTA_PERSONAJE = "/imagenes/hojasTexturas/personaje.png";
 }
