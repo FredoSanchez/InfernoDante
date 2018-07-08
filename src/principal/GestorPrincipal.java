@@ -94,7 +94,7 @@ public class GestorPrincipal {
     }
     
     private void actualizar(){
-        GestorControles.teclado.actualizar();
+        
         ge.actualizar();
     }
     
