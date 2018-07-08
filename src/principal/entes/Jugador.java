@@ -29,6 +29,7 @@ public class Jugador {
     //Se ocupa char por que se utiliza menos memoria
     private int direccion;
 
+    //Quiere decir que nos movemos a un pixel por segundo
     private double velocidad = 1;
 
     private boolean enMovimiento;
@@ -48,6 +49,13 @@ public class Jugador {
 
     private int animacion;
     private int estado;
+
+    //resistencia = 600 esta igualado es el numero de actualizacion que puede corre
+    // recuperacinon = 100 esta igualado es el numero de actualizaciones que tiene que pasar
+    public int resistencia = 600;
+    private int recuperacion = 0;
+    private int RECUPERACION_MAXIMA = 200;
+    private boolean recuperado = true;
 
     private Mapa mapa;
 
@@ -73,11 +81,31 @@ public class Jugador {
     }
 
     public void actualizar() {
+        gestionarVelocidadResitencia();
         cambiarAnimacionEstado();
         enMovimiento = false;
         determinarDireccion();
         animar();
 
+    }
+
+    private void gestionarVelocidadResitencia() {
+        //Quiere decir que el personaje puede correr por que todavia tiene resistencia
+        if (GestorControles.teclado.corriendo && resistencia > 0) {
+            velocidad = 2;
+            recuperado = false;
+            recuperacion = 0;
+        } else {
+            velocidad = 1;
+            if (!recuperado && recuperacion < RECUPERACION_MAXIMA) {
+                //Si la barra de recuperacion es menor a 100 se aumentara
+                recuperacion++;
+            }
+            if (recuperacion == RECUPERACION_MAXIMA && resistencia < 600) {
+                resistencia++;
+            }
+
+        }
     }
 
     private void cambiarAnimacionEstado() {
@@ -177,23 +205,34 @@ public class Jugador {
         if (!fueraMapa(velocidadX, velocidadY)) {
             if (velocidadX == -1 && !enColisionIzquierda(velocidadX)) {
                 posicionX += velocidadX * velocidad;
+                restarResistencia();
 
             }
 
             if (velocidadX == 1 && !enColisionDerecha(velocidadX)) {
                 posicionX += velocidadX * velocidad;
+                restarResistencia();
             }
 
             if (velocidadY == -1 && !enColisionArriba(velocidadY)) {
                 posicionY += velocidadY * velocidad;
+                restarResistencia();
             }
 
             if (velocidadY == 1 && !enColisionAbajo(velocidadY)) {
                 posicionY += velocidadY * velocidad;
+                restarResistencia();
+
             }
 
         }
 
+    }
+
+    private void restarResistencia() {
+        if (GestorControles.teclado.corriendo && resistencia > 0) {
+            resistencia--;
+        }
     }
 
     private boolean enColisionArriba(int velocidadY) {
@@ -201,7 +240,7 @@ public class Jugador {
             final Rectangle area = mapa.areasColision.get(r);
 
             int origenX = area.x;
-            
+
             int origenY = area.y + velocidadY * (int) velocidad + 3 * (int) velocidad;
 
             final Rectangle areaFutura = new Rectangle(origenX, origenY, Constantes.LADO_SPRITE, Constantes.LADO_SPRITE);
@@ -219,7 +258,7 @@ public class Jugador {
             final Rectangle area = mapa.areasColision.get(r);
 
             int origenX = area.x;
-            
+
             int origenY = area.y + velocidadY * (int) velocidad - 3 * (int) velocidad;
 
             final Rectangle areaFutura = new Rectangle(origenX, origenY, Constantes.LADO_SPRITE, Constantes.LADO_SPRITE);
@@ -317,10 +356,7 @@ public class Jugador {
         g.setColor(Color.green);
 
         g.drawImage(imagenActual, centroX, centroY, null);
-        g.drawRect(LIMITE_ARRIBA.x, LIMITE_ARRIBA.y, LIMITE_ARRIBA.width, LIMITE_ARRIBA.height);
-        g.drawRect(LIMITE_ABAJO.x, LIMITE_ABAJO.y, LIMITE_ABAJO.width, LIMITE_ABAJO.height);
-        g.drawRect(LIMITE_IZQUIERDA.x, LIMITE_IZQUIERDA.y, LIMITE_IZQUIERDA.width, LIMITE_IZQUIERDA.height);
-        g.drawRect(LIMITE_DERECHA.x, LIMITE_DERECHA.y, LIMITE_DERECHA.width, LIMITE_DERECHA.height);
+        g.drawString("Resistencia: " + resistencia, 20, 40);
 
     }
 

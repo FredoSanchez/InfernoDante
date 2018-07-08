@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import principal.Constantes;
 import principal.control.GestorControles;
 import principal.herramientas.CargadorRecursos;
+import principal.interfezusuario.HUD;
 import principal.mapas.Mapa;
 import principal.maquinaestado.EstadoJuego;
 import principal.sprites.HojaSprites;
@@ -42,6 +43,8 @@ public class GestorJuego implements EstadoJuego {
         g.setColor(Color.red);
         g.drawString("X = " + jugador.obtenerPosicionX(), 20, 20);
         g.drawString("Y = " + jugador.obtenerPosicionY(), 20, 30);
+        
+        HUD.dibujarBarraResistencia(g, jugador.resistencia);
     }
 
 }

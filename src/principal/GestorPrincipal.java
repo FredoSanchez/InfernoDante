@@ -20,7 +20,7 @@ public class GestorPrincipal {
     private String titulo;
     private int ancho;
     private int alto;
-    
+
     private SuperficieDibujo sd;
     private Ventana ventana;
     private GestorEstados ge;
@@ -33,7 +33,7 @@ public class GestorPrincipal {
 
     public static void main(String[] args) {
         GestorPrincipal gp = new GestorPrincipal("Inferno Dante", 640, 360);
-        
+
         Constantes.ANCHO_VENTANA = 640;
         Constantes.ALTO_VENTANA = 360;
 
@@ -48,14 +48,14 @@ public class GestorPrincipal {
 
     private void inicializar() {
         sd = new SuperficieDibujo(ancho, alto);
-        ventana = new Ventana(titulo,sd);
+        ventana = new Ventana(titulo, sd);
         ge = new GestorEstados();
     }
 
     private void iniciarBuclePrincipal() {
-        int aps =0;
-        int fps =0;
-        
+        int aps = 0;
+        int fps = 0;
+
         final int NS_POR_SEGUNDO = 1000000000;
         final int APS_OBJETIVO = 60; // APS= FPS que se quieren conseguir
         final double NS_POR_ACTUALIZACION = NS_POR_SEGUNDO / APS_OBJETIVO;
@@ -64,7 +64,6 @@ public class GestorPrincipal {
         long referenciaContador = System.nanoTime();
         double tiempoTranscurrido;
         double delta = 0;
-
 
         while (enFuncionamiento) {
             final long inicioBucle = System.nanoTime();
@@ -84,7 +83,7 @@ public class GestorPrincipal {
             fps++;
 
             if (System.nanoTime() - referenciaContador > NS_POR_SEGUNDO) {
-                System.out.println("FPS: "+fps+" APS: "+aps);
+                System.out.println("FPS: " + fps + " APS: " + aps);
                 aps = 0;
                 Constantes.APS = aps;
                 fps = 0;
@@ -92,15 +91,15 @@ public class GestorPrincipal {
             }
         }
     }
-    
-    private void actualizar(){
-        
+
+    private void actualizar() {
+
         ge.actualizar();
     }
-    
-    private void dibujar(){
+
+    private void dibujar() {
         sd.dibujar(ge);
-        
+
     }
 
 }
