@@ -31,6 +31,7 @@ public class GestorJuego implements EstadoJuego {
     @Override
     public void actualizar() {
         jugador.actualizar();
+        mapa.actualizar((int)jugador.obtenerPosicionX(),(int)jugador.obtenerPosicionY());
     }
 
     @Override

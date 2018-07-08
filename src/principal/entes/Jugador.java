@@ -52,8 +52,8 @@ public class Jugador {
     private Mapa mapa;
 
     public Jugador(double posicionX, double posicionY, Mapa mapa) {
-        this.posicionX = posicionX;
-        this.posicionY = posicionY;
+        this.posicionX = posicionX + 140;
+        this.posicionY = posicionY + 286;
 
         enMovimiento = false;
 
@@ -175,11 +175,96 @@ public class Jugador {
         cambiarDireccion(velocidadX, velocidadY);
 
         if (!fueraMapa(velocidadX, velocidadY)) {
-            posicionX += velocidadX * velocidad;
-            posicionY += velocidadY * velocidad;
+            if (velocidadX == -1 && !enColisionIzquierda(velocidadX)) {
+                posicionX += velocidadX * velocidad;
+
+            }
+
+            if (velocidadX == 1 && !enColisionDerecha(velocidadX)) {
+                posicionX += velocidadX * velocidad;
+            }
+
+            if (velocidadY == -1 && !enColisionArriba(velocidadY)) {
+                posicionY += velocidadY * velocidad;
+            }
+
+            if (velocidadY == 1 && !enColisionAbajo(velocidadY)) {
+                posicionY += velocidadY * velocidad;
+            }
 
         }
 
+    }
+
+    private boolean enColisionArriba(int velocidadY) {
+        for (int r = 0; r < mapa.areasColision.size(); r++) {
+            final Rectangle area = mapa.areasColision.get(r);
+
+            int origenX = area.x;
+            
+            int origenY = area.y + velocidadY * (int) velocidad + 3 * (int) velocidad;
+
+            final Rectangle areaFutura = new Rectangle(origenX, origenY, Constantes.LADO_SPRITE, Constantes.LADO_SPRITE);
+
+            if (LIMITE_ARRIBA.intersects(areaFutura)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean enColisionAbajo(int velocidadY) {
+        for (int r = 0; r < mapa.areasColision.size(); r++) {
+            final Rectangle area = mapa.areasColision.get(r);
+
+            int origenX = area.x;
+            
+            int origenY = area.y + velocidadY * (int) velocidad - 3 * (int) velocidad;
+
+            final Rectangle areaFutura = new Rectangle(origenX, origenY, Constantes.LADO_SPRITE, Constantes.LADO_SPRITE);
+
+            if (LIMITE_ABAJO.intersects(areaFutura)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean enColisionIzquierda(int velocidadX) {
+        for (int r = 0; r < mapa.areasColision.size(); r++) {
+            final Rectangle area = mapa.areasColision.get(r);
+
+            int origenX = area.x + velocidadX * (int) velocidad + 3 * (int) velocidad;
+            int origenY = area.y;
+
+            final Rectangle areaFutura = new Rectangle(origenX, origenY, Constantes.LADO_SPRITE, Constantes.LADO_SPRITE);
+
+            if (LIMITE_IZQUIERDA.intersects(areaFutura)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean enColisionDerecha(int velocidadX) {
+        for (int r = 0; r < mapa.areasColision.size(); r++) {
+            final Rectangle area = mapa.areasColision.get(r);
+
+            int origenX = area.x + velocidadX * (int) velocidad - 3 * (int) velocidad;;
+
+            int origenY = area.y;
+
+            final Rectangle areaFutura = new Rectangle(origenX, origenY, Constantes.LADO_SPRITE, Constantes.LADO_SPRITE);
+
+            if (LIMITE_DERECHA.intersects(areaFutura)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     //Al poner (int) al frente de una variable double se llama conversion explicita
