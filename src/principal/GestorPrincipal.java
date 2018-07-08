@@ -34,8 +34,8 @@ public class GestorPrincipal {
     public static void main(String[] args) {
         GestorPrincipal gp = new GestorPrincipal("Inferno Dante", 640, 360);
         
-        Constantes.ANCHO_PANTALLA = 640;
-        Constantes.ALTO_PANTALLA = 360;
+        Constantes.ANCHO_VENTANA = 640;
+        Constantes.ALTO_VENTANA = 360;
 
         gp.iniciarJuego();
         gp.iniciarBuclePrincipal();

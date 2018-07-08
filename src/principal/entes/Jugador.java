@@ -49,7 +49,7 @@ public class Jugador {
 
         direccion = 0;
 
-        hs = new HojaSprites("/imagenes/hojasTexturas/personaje.png", Constantes.LADO_SPRITE, false);
+        hs = new HojaSprites(Constantes.RUTA_PERSONAJE, Constantes.LADO_SPRITE, false);
 
         imagenActual = hs.getSprites(0).getImagen();
 
@@ -171,7 +171,7 @@ public class Jugador {
         if (velocidadX == -1) {
             direccion = 3;
         } else if (velocidadX == 1) { // velocidadX = 1 quiere decir que nos estamos moviendo hacia derecha  
-            direccion = 2;
+                direccion = 2;
         }
         //velocidadY = -1 quiere decir que nos estamos moviendo hacia la arriba
         if (velocidadY == -1) {
@@ -191,8 +191,8 @@ public class Jugador {
     }
 
     public void dibujar(Graphics g) {
-        final int centroX = Constantes.ANCHO_PANTALLA / 2 - Constantes.LADO_SPRITE / 2;
-        final int centroY = Constantes.ALTO_PANTALLA / 2 - Constantes.LADO_SPRITE / 2;
+        final int centroX = Constantes.ANCHO_VENTANA / 2 - Constantes.LADO_SPRITE / 2;
+        final int centroY = Constantes.ALTO_VENTANA / 2 - Constantes.LADO_SPRITE / 2;
 
         g.setColor(Color.green);
 
