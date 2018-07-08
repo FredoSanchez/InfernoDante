@@ -37,6 +37,7 @@ public class SuperficieDibujo extends Canvas {
 
         this.raton = new Raton();
 
+        setCursor(raton.obtenerCursor());
         setIgnoreRepaint(true);
         setPreferredSize(new Dimension(ancho, alto));
         addKeyListener(GestorControles.teclado);
