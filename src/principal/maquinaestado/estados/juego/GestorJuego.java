@@ -9,6 +9,7 @@ import principal.entes.Jugador;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import principal.Constantes;
 import principal.control.GestorControles;
 import principal.herramientas.CargadorRecursos;
 import principal.mapas.Mapa;
@@ -24,7 +25,7 @@ public class GestorJuego implements EstadoJuego {
    // String texto = CargadorRecursos.leerArchivoTexto("/texto/prueba.ad");
 
     Jugador jugador = new Jugador(0,0);
-    Mapa mapa = new Mapa("/texto/prueba.ad");
+    Mapa mapa = new Mapa(Constantes.RUTA_MAPA);
 
     @Override
     public void actualizar() {
