@@ -7,6 +7,7 @@ package principal.mapas;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import principal.Constantes;
@@ -30,6 +31,9 @@ public class Mapa {
     public final boolean[] colisiones;
 
     private final int[] sprites;
+
+    private final int MARGEN_X = Constantes.ANCHO_VENTANA / 2 - Constantes.LADO_SPRITE / 2;
+    private final int MARGEN_Y = Constantes.ALTO_VENTANA / 2 - Constantes.LADO_SPRITE / 2;
 
     public Mapa(final String ruta) {
 
@@ -56,7 +60,6 @@ public class Mapa {
         String spritesEnteros = partes[5];
 
         String[] cadenasSprites = spritesEnteros.split(" ");
-        
 
         sprites = extraerSprites(cadenasSprites);
 
@@ -72,15 +75,12 @@ public class Mapa {
             String spriteTemporal = partesPaleta[i];
 
             String[] partesSprite = spriteTemporal.split("-");
-            
-          
 
             int indicePaleta = Integer.parseInt(partesSprite[0]);
-            
-           
+
             int indiceSpriteHoja = Integer.parseInt(partesSprite[2]);
             System.out.println(paleta.length);
-            
+
             paleta[indicePaleta] = hoja.getSprites(indiceSpriteHoja);
         }
         return paleta;
@@ -130,19 +130,34 @@ public class Mapa {
         return vectorSprites;
     }
 
-    public void dibujar(Graphics g, int posicionX, int posicionY) {
-        int anchoSprite = Constantes.LADO_SPRITE;
-        int altoSprite = anchoSprite;
-        
+    public void dibujar(Graphics g, final int posicionX, final int posicionY) {
+        /* int anchoSprite = Constantes.LADO_SPRITE;
+        int altoSprite = anchoSprite;*/
+
         for (int y = 0; y < this.alto; y++) {
 
             for (int x = 0; x < this.ancho; x++) {
-                BufferedImage imagen= paleta[sprites[x+y*this.ancho]].getImagen();
-                
-                g.drawImage(imagen,x*anchoSprite - posicionX , y*altoSprite - posicionY,null);
+                BufferedImage imagen = paleta[sprites[x + y * this.ancho]].getImagen();
+
+                //Esto es para poder poner el personaje en el punto(0,0)
+                int puntoX = x * Constantes.LADO_SPRITE - posicionX + MARGEN_X;
+                int puntoY = y * Constantes.LADO_SPRITE - posicionY + MARGEN_Y;
+
+                g.drawImage(imagen, puntoX, puntoY, null);
 
             }
         }
+    }
+
+    //Es para colicionar con el borde del mapa 
+    public Rectangle getBordes(final int posicionX, final int posicionY, final int anchoJugador, final int altoJugador) {
+        int x = MARGEN_X - posicionX + anchoJugador;
+        int y = MARGEN_Y - posicionY + altoJugador;
+        int ancho = this.ancho * Constantes.LADO_SPRITE - anchoJugador * 2;
+        int alto = this.alto * Constantes.LADO_SPRITE - altoJugador * 2;
+
+        return new Rectangle(x,y,ancho,alto);
+
     }
 
 }

@@ -7,9 +7,11 @@ package principal.entes;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import principal.Constantes;
 import principal.control.GestorControles;
+import principal.mapas.Mapa;
 import principal.sprites.HojaSprites;
 import principal.sprites.Sprite;
 
@@ -36,10 +38,20 @@ public class Jugador {
     // Se crea esta variable para poder almacenar la imagen
     private BufferedImage imagenActual;
 
+    private final int ANCHO_JUGADOR = 16;
+    private final int ALTO_JUGADOR = 16;
+
+    private final Rectangle LIMITE_ARRIBA = new Rectangle(Constantes.CENTRO_VENTANA_X - ANCHO_JUGADOR / 2, Constantes.CENTRO_VENTANA_Y, ANCHO_JUGADOR, 1);
+    private final Rectangle LIMITE_ABAJO = new Rectangle(Constantes.CENTRO_VENTANA_X - ANCHO_JUGADOR / 2, Constantes.CENTRO_VENTANA_Y + ALTO_JUGADOR, ANCHO_JUGADOR, 1);
+    private final Rectangle LIMITE_IZQUIERDA = new Rectangle(Constantes.CENTRO_VENTANA_X - ANCHO_JUGADOR / 2, Constantes.CENTRO_VENTANA_Y, 1, ALTO_JUGADOR);
+    private final Rectangle LIMITE_DERECHA = new Rectangle(Constantes.CENTRO_VENTANA_X + ANCHO_JUGADOR / 2, Constantes.CENTRO_VENTANA_Y, 1, ALTO_JUGADOR);
+
     private int animacion;
     private int estado;
 
-    public Jugador(double posicionX, double posicionY) {
+    private Mapa mapa;
+
+    public Jugador(double posicionX, double posicionY, Mapa mapa) {
         this.posicionX = posicionX;
         this.posicionY = posicionY;
 
@@ -56,6 +68,8 @@ public class Jugador {
         animacion = 0;
         estado = 0;
 
+        this.mapa = mapa;
+
     }
 
     public void actualizar() {
@@ -67,19 +81,18 @@ public class Jugador {
     }
 
     private void cambiarAnimacionEstado() {
-        if(animacion < 30){
+        if (animacion < 30) {
             animacion++;
-        }else{
+        } else {
             animacion = 0;
         }
-        
-        if(animacion < 15){
+
+        if (animacion < 15) {
             estado = 1;
-        }else{
+        } else {
             estado = 2;
         }
-            
-        
+
     }
 
     private void determinarDireccion() {
@@ -93,40 +106,40 @@ public class Jugador {
         //Esto para que el personaje no se pueda mover en diagonal 
         if ((velocidadX != 0 && velocidadY == 0) || ((velocidadX == 0 && velocidadY != 0))) {
             mover(velocidadX, velocidadY);
-        } else{
+        } else {
             // izquierda y arriba
-            if(velocidadX == -1 && velocidadY == -1){
-                if(GestorControles.teclado.izquierda.getUltimaPulsacion() > GestorControles.teclado.arriba.getUltimaPulsacion()){
-                    mover(velocidadX,0);
-                }else{
+            if (velocidadX == -1 && velocidadY == -1) {
+                if (GestorControles.teclado.izquierda.getUltimaPulsacion() > GestorControles.teclado.arriba.getUltimaPulsacion()) {
+                    mover(velocidadX, 0);
+                } else {
                     mover(0, velocidadY);
                 }
             }
             //izquierda y abajo
-            if(velocidadX == -1 && velocidadY == 1){
-                if(GestorControles.teclado.izquierda.getUltimaPulsacion() > GestorControles.teclado.abajo.getUltimaPulsacion()){
-                    mover(velocidadX,0);
-                }else{
+            if (velocidadX == -1 && velocidadY == 1) {
+                if (GestorControles.teclado.izquierda.getUltimaPulsacion() > GestorControles.teclado.abajo.getUltimaPulsacion()) {
+                    mover(velocidadX, 0);
+                } else {
                     mover(0, velocidadY);
                 }
             }
             // derecha y arriba
-             if(velocidadX == 1 && velocidadY == -1){
-                if(GestorControles.teclado.derecha.getUltimaPulsacion() > GestorControles.teclado.arriba.getUltimaPulsacion()){
-                    mover(velocidadX,0);
-                }else{
+            if (velocidadX == 1 && velocidadY == -1) {
+                if (GestorControles.teclado.derecha.getUltimaPulsacion() > GestorControles.teclado.arriba.getUltimaPulsacion()) {
+                    mover(velocidadX, 0);
+                } else {
                     mover(0, velocidadY);
                 }
             }
             //derecha y abajo 
-             if(velocidadX == 1 && velocidadY == -1){
-                if(GestorControles.teclado.derecha.getUltimaPulsacion() > GestorControles.teclado.abajo.getUltimaPulsacion()){
-                    mover(velocidadX,0);
-                }else{
+            if (velocidadX == 1 && velocidadY == -1) {
+                if (GestorControles.teclado.derecha.getUltimaPulsacion() > GestorControles.teclado.abajo.getUltimaPulsacion()) {
+                    mover(velocidadX, 0);
+                } else {
                     mover(0, velocidadY);
                 }
             }
-             
+
         }
 
     }
@@ -159,19 +172,41 @@ public class Jugador {
     private void mover(int velocidadX, int velocidadY) {
         enMovimiento = true;
 
-       cambiarDireccion(velocidadX, velocidadY);
-        
-        posicionX += velocidadX * velocidad;
-        posicionY += velocidadY * velocidad;
+        cambiarDireccion(velocidadX, velocidadY);
+
+        if (!fueraMapa(velocidadX, velocidadY)) {
+            posicionX += velocidadX * velocidad;
+            posicionY += velocidadY * velocidad;
+
+        }
 
     }
-    
-    private void cambiarDireccion(int velocidadX, int velocidadY){
-         //velocidadX == -1 quiere decir que nos estamos moviendo hacia la izquieda
+
+    //Al poner (int) al frente de una variable double se llama conversion explicita
+    private boolean fueraMapa(final int velocidadX, final int velocidadY) {
+
+        int posicionFuturaX = (int) posicionX + velocidadX * (int) velocidad;
+        int posicionFuturaY = (int) posicionY + velocidadY * (int) velocidad;
+
+        final Rectangle bordesMapa = mapa.getBordes(posicionFuturaX, posicionFuturaY, ANCHO_JUGADOR, ALTO_JUGADOR);
+
+        final boolean fuera;
+
+        if (LIMITE_ARRIBA.intersects(bordesMapa) || LIMITE_ABAJO.intersects(bordesMapa) || LIMITE_IZQUIERDA.intersects(bordesMapa) || LIMITE_DERECHA.intersects(bordesMapa)) {
+            fuera = false;
+        } else {
+            fuera = true;
+        }
+
+        return fuera;
+    }
+
+    private void cambiarDireccion(int velocidadX, int velocidadY) {
+        //velocidadX == -1 quiere decir que nos estamos moviendo hacia la izquieda
         if (velocidadX == -1) {
             direccion = 3;
         } else if (velocidadX == 1) { // velocidadX = 1 quiere decir que nos estamos moviendo hacia derecha  
-                direccion = 2;
+            direccion = 2;
         }
         //velocidadY = -1 quiere decir que nos estamos moviendo hacia la arriba
         if (velocidadY == -1) {
@@ -182,12 +217,12 @@ public class Jugador {
     }
 
     private void animar() {
-        if(!enMovimiento){
+        if (!enMovimiento) {
             estado = 0;
-            animacion =0;
+            animacion = 0;
         }
-        
-        imagenActual = hs.getSprites(direccion,estado).getImagen();
+
+        imagenActual = hs.getSprites(direccion, estado).getImagen();
     }
 
     public void dibujar(Graphics g) {
@@ -197,7 +232,10 @@ public class Jugador {
         g.setColor(Color.green);
 
         g.drawImage(imagenActual, centroX, centroY, null);
-        g.drawRect(centroX + 5, centroY, 20, 32);
+        g.drawRect(LIMITE_ARRIBA.x, LIMITE_ARRIBA.y, LIMITE_ARRIBA.width, LIMITE_ARRIBA.height);
+        g.drawRect(LIMITE_ABAJO.x, LIMITE_ABAJO.y, LIMITE_ABAJO.width, LIMITE_ABAJO.height);
+        g.drawRect(LIMITE_IZQUIERDA.x, LIMITE_IZQUIERDA.y, LIMITE_IZQUIERDA.width, LIMITE_IZQUIERDA.height);
+        g.drawRect(LIMITE_DERECHA.x, LIMITE_DERECHA.y, LIMITE_DERECHA.width, LIMITE_DERECHA.height);
 
     }
 

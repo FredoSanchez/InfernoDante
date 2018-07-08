@@ -24,8 +24,9 @@ public class GestorJuego implements EstadoJuego {
 
    // String texto = CargadorRecursos.leerArchivoTexto("/texto/prueba.ad");
 
-    Jugador jugador = new Jugador(0,0);
+    
     Mapa mapa = new Mapa(Constantes.RUTA_MAPA);
+    Jugador jugador = new Jugador(0,0,mapa);
 
     @Override
     public void actualizar() {
