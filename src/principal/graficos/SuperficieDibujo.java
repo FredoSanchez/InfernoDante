@@ -69,6 +69,8 @@ public class SuperficieDibujo extends Canvas {
         g.setColor(Color.GREEN);
         g.drawString("FPS: " + GestorPrincipal.getFps(),20, 60);
         g.drawString("APS: " + GestorPrincipal.getAps() , 20, 50);
+        g.drawString("Escala x: " + Constantes.FACTOR_ESCALADO_X,20,70);
+        g.drawString("Escala y: " + Constantes.FACTOR_ESCALADO_Y,20,80);
 
         Toolkit.getDefaultToolkit().sync();
 
