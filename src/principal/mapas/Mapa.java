@@ -7,6 +7,7 @@ package principal.mapas;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -26,10 +27,17 @@ public class Mapa {
     private final int ancho;
     private final int alto;
 
+    private final Point posicionInicial;
+    private final Point puntoSalida;
+
+    private Rectangle zonaSalida;
+
+    private String siguienteMapa;
+
     private final Sprite[] paleta;
 
     public final boolean[] colisiones;
-    
+
     public ArrayList<Rectangle> areasColision = new ArrayList<Rectangle>();
 
     private final int[] sprites;
@@ -64,6 +72,24 @@ public class Mapa {
         String[] cadenasSprites = spritesEnteros.split(" ");
 
         sprites = extraerSprites(cadenasSprites);
+
+        String posicion = partes[6];
+        String[] posiciones = posicion.split("-");
+
+        posicionInicial = new Point();
+
+        posicionInicial.x = Integer.parseInt(posiciones[0]) * Constantes.LADO_SPRITE;
+        posicionInicial.y = Integer.parseInt(posiciones[1]) * Constantes.LADO_SPRITE;
+
+        String salida = partes[7];
+        String[] datosSalida = salida.split("-");
+
+        puntoSalida = new Point();
+        puntoSalida.x = Integer.parseInt(datosSalida[0]);
+        puntoSalida.y = Integer.parseInt(datosSalida[1]);
+        siguienteMapa = datosSalida[2];
+
+        zonaSalida = new Rectangle();
 
     }
 
@@ -131,27 +157,36 @@ public class Mapa {
 
         return vectorSprites;
     }
-    
-    public void actualizar(final int posicionX, final int posicionY){
-          actualizarAreasColision(posicionX,posicionY);
+
+    public void actualizar(final int posicionX, final int posicionY) {
+        actualizarAreasColision(posicionX, posicionY);
+        actualizarZonaSalida(posicionX, posicionY);
     }
-    
-    private void actualizarAreasColision(final int posicionX, final int posicionY){
-        if(!areasColision.isEmpty()){
+
+    private void actualizarAreasColision(final int posicionX, final int posicionY) {
+        if (!areasColision.isEmpty()) {
             areasColision.clear();
         }
-        
-        for(int y = 0; y < this.alto; y++){
-            for(int x = 0; x < this.ancho; x++){
+
+        for (int y = 0; y < this.alto; y++) {
+            for (int x = 0; x < this.ancho; x++) {
                 int puntoX = x * Constantes.LADO_SPRITE - posicionX + MARGEN_X;
                 int puntoY = y * Constantes.LADO_SPRITE - posicionY + MARGEN_Y;
-                
-                if(colisiones[x + y * this.ancho]){
-                    final Rectangle r = new Rectangle(puntoX , puntoY, Constantes.LADO_SPRITE, Constantes.LADO_SPRITE);
+
+                if (colisiones[x + y * this.ancho]) {
+                    final Rectangle r = new Rectangle(puntoX, puntoY, Constantes.LADO_SPRITE, Constantes.LADO_SPRITE);
                     areasColision.add(r);
                 }
             }
         }
+    }
+
+    private void actualizarZonaSalida(final int posicionX, final int posicionY) {
+        int puntoX = ((int) puntoSalida.getX()) * Constantes.LADO_SPRITE - posicionX + MARGEN_X;
+        int puntoY = ((int) puntoSalida.getY()) * Constantes.LADO_SPRITE - posicionY + MARGEN_Y;
+
+        zonaSalida = new Rectangle(puntoX, puntoY, Constantes.LADO_SPRITE, Constantes.LADO_SPRITE);
+        
     }
 
     public void dibujar(Graphics g, final int posicionX, final int posicionY) {
@@ -168,17 +203,30 @@ public class Mapa {
                 int puntoY = y * Constantes.LADO_SPRITE - posicionY + MARGEN_Y;
 
                 g.drawImage(imagen, puntoX, puntoY, null);
-                
+
                 //g.setColor(Color.green);
-                
                 /* Esto es para ver los cuadros de colision
                 for(int r = 0; r < areasColision.size(); r++ ){
                     Rectangle area = areasColision.get(r);
                     g.drawRect(area.x, area.y, area.width, area.height);
                 }*/
-
             }
         }
+    }
+
+    public Point obtenerPosicionInicial() {
+        return posicionInicial;
+    }
+
+    public Point obtenerPuntoSalida() {
+        return puntoSalida;
+    }
+
+    public String obtenerSiguienteMapa() {
+        return siguienteMapa;
+    }
+    public Rectangle obtenerZonaSalida() {
+        return zonaSalida;
     }
 
     //Es para colicionar con el borde del mapa 
@@ -188,7 +236,7 @@ public class Mapa {
         int ancho = this.ancho * Constantes.LADO_SPRITE - anchoJugador * 2;
         int alto = this.alto * Constantes.LADO_SPRITE - altoJugador * 2;
 
-        return new Rectangle(x,y,ancho,alto);
+        return new Rectangle(x, y, ancho, alto);
 
     }
 

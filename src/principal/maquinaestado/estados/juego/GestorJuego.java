@@ -26,11 +26,36 @@ public class GestorJuego implements EstadoJuego {
    // String texto = CargadorRecursos.leerArchivoTexto("/texto/prueba.ad");
 
     
-    Mapa mapa = new Mapa(Constantes.RUTA_MAPA);
-    Jugador jugador = new Jugador(0,0,mapa);
+    Mapa mapa;
+    Jugador jugador;
+
+    public GestorJuego() {
+        iniciarMapa(Constantes.RUTA_MAPA);
+        iniciarJugador();
+        
+    }
+    
+    private void recargarJuego(){
+        final String ruta = "/mapas/"+mapa.obtenerSiguienteMapa();
+        
+        iniciarMapa(ruta);
+        iniciarJugador();
+    }
+    
+    private void iniciarMapa(final String ruta){
+        mapa = new Mapa(ruta);
+    }
+    
+    private void iniciarJugador(){
+        jugador = new Jugador(mapa);
+    }
 
     @Override
     public void actualizar() {
+        if(jugador.obtener_LIMITE_ARRIBA().intersects(mapa.obtenerZonaSalida())){
+            recargarJuego();
+        }
+        
         jugador.actualizar();
         mapa.actualizar((int)jugador.obtenerPosicionX(),(int)jugador.obtenerPosicionY());
     }
@@ -43,6 +68,12 @@ public class GestorJuego implements EstadoJuego {
         g.setColor(Color.red);
         g.drawString("X = " + jugador.obtenerPosicionX(), 20, 20);
         g.drawString("Y = " + jugador.obtenerPosicionY(), 20, 30);
+        
+        g.fillRect(mapa.obtenerZonaSalida().x,mapa.obtenerZonaSalida().y,mapa.obtenerZonaSalida().width,mapa.obtenerZonaSalida().height);
+        
+        g.drawString("Siguienta mapa:  " + mapa.obtenerSiguienteMapa(),20, 130);
+        g.drawString("Coordenadas salida X: " + mapa.obtenerPuntoSalida().getX() + "  Y: " + mapa.obtenerPuntoSalida().getY(), 20, 140);
+        
         
         HUD.dibujarBarraResistencia(g, jugador.resistencia);
     }

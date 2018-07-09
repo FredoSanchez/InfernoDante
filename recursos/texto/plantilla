@@ -31,4 +31,8 @@
 01 01 01 02 02 02 02 01 01 01
 01 01 01 02 02 02 02 01 01 01
 01 01 01 02 02 02 02 01 01 01
+*
+0-10 //Punto de aparición en sprite (x-y)
+*
+4-3-prueba2.ad //Punto de salida del mapa y mapa en el que aparecera
 
